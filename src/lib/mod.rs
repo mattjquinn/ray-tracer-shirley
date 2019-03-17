@@ -1,4 +1,4 @@
-use std::ops::{Index, Mul, Add, Div};
+use std::ops::{Index, Mul, Add, Div, Sub};
 
 pub struct Vec3 {
     e : [f64; 3],
@@ -23,6 +23,10 @@ impl Vec3 {
     pub fn unit_vector(&self) -> Vec3 {
          self / self.length()
     }
+
+    pub fn dot(v1 : &Vec3, v2 : &Vec3) -> f64 {
+        v1[0] * v2[0] + v1[1] * v2[1]  + v1[2] * v2[2]
+    }
 }
 
 impl Index<usize> for Vec3 {
@@ -38,6 +42,22 @@ impl<'a, 'b> Add<&'a Vec3> for &'b Vec3 {
 
     fn add(self, rhs: &'a Vec3) -> Vec3 {
         Vec3::new(self[0] + rhs[0], self[1] + rhs[1], self[2] + rhs[2])
+    }
+}
+
+impl<'a, 'b> Sub<&'a Vec3> for &'b Vec3 {
+    type Output = Vec3;
+
+    fn sub(self, rhs: &'a Vec3) -> Vec3 {
+        Vec3::new(self[0] - rhs[0], self[1] - rhs[1], self[2] - rhs[2])
+    }
+}
+
+impl<'a, 'b> Mul<&'a Vec3> for &'b Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: &'a Vec3) -> Vec3 {
+        Vec3::new(self[0] * rhs[0], self[1] * rhs[1], self[2] * rhs[2])
     }
 }
 
@@ -67,7 +87,6 @@ impl<'a> Ray<'a> {
         Ray { a, b }
     }
 
-    pub fn direction(&self) -> &'a Vec3 {
-        self.b
-    }
+    pub fn origin(&self) -> &'a Vec3 { self.a }
+    pub fn direction(&self) -> &'a Vec3 { self.b }
 }
